@@ -97,6 +97,75 @@ public class MotorPHPayroll {
     // PERSON 2 – EMPLOYEE DATA
     // =========================
     static void readEmployeeData(int employeeNumber) {
+package com.example;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int employeeNumber = 10001;
+
+        String[] employee = readEmployeeData(employeeNumber);
+
+        if (employee != null) {
+        }
+
+    }
+
+    static String[] readEmployeeData(int employeeNumber) {
+
+        String line;
+
+        try {
+
+            InputStream input = Main.class.getClassLoader()
+                    .getResourceAsStream("employees.csv");
+
+            if (input == null) {
+                return null;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(input));
+
+            br.readLine(); // skip header
+
+            while ((line = br.readLine()) != null) {
+
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+                int empNumber = Integer.parseInt(data[0].trim());
+
+                if (empNumber == employeeNumber) {
+
+                    String firstName = data[1].trim();
+                    String lastName = data[2].trim();
+                    String birthday = data[3].trim();
+                    String hourlyRate = data[data.length - 1].replace("\"", "").trim();
+
+                    br.close();
+
+                    return new String[]{
+                            String.valueOf(empNumber),
+                            firstName,
+                            lastName,
+                            birthday,
+                            hourlyRate
+                    };
+                }
+            }
+
+            br.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     }
 
