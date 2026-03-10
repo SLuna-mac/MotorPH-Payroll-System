@@ -111,7 +111,27 @@ public class MotorPHPayroll {
     // PERSON 4 – HOURS AGGREGATION
     // =========================
     static double computeCutoffHours(int employeeNumber) {
-        return 0;
+        double totalHours = 0.0;
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length < 6) continue; 
+
+                try {
+                    int id = Integer.parseInt(data[0].trim());
+                    if (id == employeeNumber) {
+                        totalHours += computeDailyHours(data[4].trim(), data[5].trim());
+                    }
+                } catch (NumberFormatException e) {
+                    // skip header
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error reading attendance file.");
+        }
+        return totalHours;
     }
 
     // =========================
