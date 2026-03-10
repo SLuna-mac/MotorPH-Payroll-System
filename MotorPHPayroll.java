@@ -32,9 +32,6 @@ public class MotorPHPayroll {
         }
     }
 
-    // =========================
-    // PERSON 1 - EMPLOYEE MENU
-    // =========================
     static void employeeMenu() {
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEMPLOYEE MENU");
@@ -54,9 +51,6 @@ public class MotorPHPayroll {
         }
     }
 
-    // =========================
-    // PERSON 1 - PAYROLL STAFF MENU
-    // =========================
     static void payrollMenu() {
         Scanner sc = new Scanner(System.in);
         System.out.println("\nPAYROLL STAFF MENU");
@@ -77,13 +71,16 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 2 - EMPLOYEE DATA
     // =========================
-    static void readEmployeeData(int employeeNumber) {}
+    static void readEmployeeData(int employeeNumber) {
+        // Implementation for reading employee details goes here
+    }
 
     // =========================
     // PERSON 3 - ATTENDANCE LOGIC
     // =========================
     static double computeDailyHours(String login, String logout) {
-        return 0;
+        // Logic to calculate hours between login and logout
+        return 0.0;
     }
 
     // =========================
@@ -92,16 +89,18 @@ public class MotorPHPayroll {
     static double computeCutoffHours(int employeeNumber) {
         double totalHours = 0.0;
 
+        // try-with-resources: one reader, auto-closes
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
+                // check employee number (column 0), call compute once (cols 4 & 5)
                 if (Integer.parseInt(data[0]) == employeeNumber) {
                     totalHours += computeDailyHours(data[4], data[5]);
                 }
             }
         } catch (Exception e) {
-            // handles file errors
+            // silent catch for file errors
         }
         return totalHours; 
     }
@@ -109,10 +108,14 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 5 - SALARY COMPUTATION
     // =========================
-    static void computeSalary(double hours, double rate) {}
+    static void computeSalary(double hours, double rate) {
+        // Implementation for salary calculation
+    }
 
     // =========================
     // PERSON 6 - OUTPUT DISPLAY
     // =========================
-    static void printPayroll() {}
+    static void printPayroll() {
+        // Implementation for displaying final results
+    }
 }
