@@ -112,27 +112,30 @@ public class MotorPHPayroll {
     // =========================
     static double computeCutoffHours(int employeeNumber) {
         double totalHours = 0.0;
-        String line;
-        
-        // try-with-resources automatically closes the file for you
-        try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
+
+        try {
+            // read attendance.csv
+            BufferedReader br = new BufferedReader(new FileReader("attendance.csv"));
+            String line;
+            
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 
-                // check if this row belongs to the employee we want
-                int idInFile = Integer.parseInt(data[0].trim());
-                
-                if (idInFile == employeeNumber) {
-                    // we send the login/logout to person 3
-                    double daily = computeDailyHours(data[1], data[2]);
-                    totalHours += daily; // add to the total
+                // check rows for the given employee number
+                if (Integer.parseInt(data[0]) == employeeNumber) {
+                    
+                    // call computeDailyHours(login, logout) from Person 3
+                    // add those values to totalHours
+                    totalHours += computeDailyHours(data[4], data[5]);
                 }
             }
+            br.close();
         } catch (Exception e) {
-            // if the file isn't found, it just returns 0.0 and doesn't crash
+            // keeps totalHours at 0.0 if file error happens
         }
-        
-        return totalHours;
+
+        // return totalHours at the end
+        return totalHours; 
     }
 
     // =========================
