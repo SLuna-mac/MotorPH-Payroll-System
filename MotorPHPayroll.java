@@ -12,8 +12,10 @@ public class MotorPHPayroll {
     // =========================
     static void login() {
         Scanner sc = new Scanner(System.in);
+
         System.out.print("Username: ");
         String username = sc.nextLine();
+
         System.out.print("Password: ");
         String password = sc.nextLine();
 
@@ -34,11 +36,13 @@ public class MotorPHPayroll {
 
     static void employeeMenu() {
         Scanner sc = new Scanner(System.in);
+
         System.out.println("\nEMPLOYEE MENU");
         System.out.println("1. Enter your employee number");
         System.out.println("2. Exit the program");
 
         int choice = sc.nextInt();
+
         if (choice == 1) {
             System.out.print("Enter employee number: ");
             int empNum = sc.nextInt();
@@ -53,11 +57,13 @@ public class MotorPHPayroll {
 
     static void payrollMenu() {
         Scanner sc = new Scanner(System.in);
+
         System.out.println("\nPAYROLL STAFF MENU");
         System.out.println("1. Process Payroll");
         System.out.println("2. Exit the program");
 
         int choice = sc.nextInt();
+
         if (choice == 1) {
             System.out.println("Payroll processing will be implemented here.");
         } else if (choice == 2) {
@@ -93,7 +99,7 @@ public class MotorPHPayroll {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                // check employee number (col 0), call compute once (cols 4 & 5)
+                // check employee (col 0), call compute once (cols 4 & 5)
                 if (Integer.parseInt(data[0]) == employeeNumber) {
                     totalHours += computeDailyHours(data[4], data[5]);
                 }
@@ -101,7 +107,7 @@ public class MotorPHPayroll {
         } catch (Exception e) {
             // silent catch for file errors
         }
-        return totalHours; 
+        return totalHours;
     }
 
     // =========================
