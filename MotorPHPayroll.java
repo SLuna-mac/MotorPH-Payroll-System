@@ -107,7 +107,7 @@ public class MotorPHPayroll {
         return 0;
     }
 
-        // =========================
+    // =========================
     // PERSON 4 – HOURS AGGREGATION
     // =========================
     static double computeCutoffHours(int employeeNumber) {
@@ -117,27 +117,22 @@ public class MotorPHPayroll {
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                int id = Integer.parseInt(data[0].trim());
+                if (data.length < 6) continue; 
 
-                // check if this row belongs to the employee
-                if (id == employeeNumber) {
-                    String login = data[4].trim();
-                    String logout = data[5].trim();
-
-                    // call Person 3's method
-                    double dailyHours = computeDailyHours(login, logout);
-
-                    // add to total
-                    totalHours += dailyHours;
+                try {
+                    int id = Integer.parseInt(data[0].trim());
+                    if (id == employeeNumber) {
+                        totalHours += computeDailyHours(data[4].trim(), data[5].trim());
+                    }
+                } catch (NumberFormatException e) {
+                    // skip header
                 }
             }
         } catch (Exception e) {
             System.out.println("Error reading attendance file.");
         }
-
         return totalHours;
     }
-
 
     // =========================
     // PERSON 5 – SALARY COMPUTATION
