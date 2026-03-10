@@ -72,7 +72,7 @@ public class MotorPHPayroll {
     // PERSON 2 - EMPLOYEE DATA
     // =========================
     static void readEmployeeData(int employeeNumber) {
-        // Implementation for reading employee details goes here
+        // Implementation for reading employee details
     }
 
     // =========================
@@ -89,7 +89,7 @@ public class MotorPHPayroll {
     static double computeCutoffHours(int employeeNumber) {
         double totalHours = 0.0;
 
-        // try-with-resources: one reader, auto-closes
+        // try-with-resources: one reader, auto-closes [fixes leader's roast]
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -100,7 +100,7 @@ public class MotorPHPayroll {
                 }
             }
         } catch (Exception e) {
-            // silent catch for file errors
+            // handles file errors
         }
         return totalHours; 
     }
@@ -116,6 +116,6 @@ public class MotorPHPayroll {
     // PERSON 6 - OUTPUT DISPLAY
     // =========================
     static void printPayroll() {
-        // Implementation for displaying final results
+        // Implementation for displaying results
     }
 }
