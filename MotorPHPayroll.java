@@ -72,14 +72,13 @@ public class MotorPHPayroll {
     // PERSON 2 - EMPLOYEE DATA
     // =========================
     static void readEmployeeData(int employeeNumber) {
-        // Implementation for reading employee details
+        // Implementation for reading employee details goes here
     }
 
     // =========================
     // PERSON 3 - ATTENDANCE LOGIC
     // =========================
     static double computeDailyHours(String login, String logout) {
-        // Logic to calculate hours between login and logout
         return 0.0;
     }
 
@@ -89,18 +88,18 @@ public class MotorPHPayroll {
     static double computeCutoffHours(int employeeNumber) {
         double totalHours = 0.0;
 
-        // try-with-resources: one reader, auto-closes [fixes leader's roast]
+        // try-with-resources: one reader, auto-closes
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                // check employee number (column 0), call compute once (cols 4 & 5)
+                // check employee number (col 0), call compute once (cols 4 & 5)
                 if (Integer.parseInt(data[0]) == employeeNumber) {
                     totalHours += computeDailyHours(data[4], data[5]);
                 }
             }
         } catch (Exception e) {
-            // handles file errors
+            // silent catch for file errors
         }
         return totalHours; 
     }
@@ -116,6 +115,6 @@ public class MotorPHPayroll {
     // PERSON 6 - OUTPUT DISPLAY
     // =========================
     static void printPayroll() {
-        // Implementation for displaying results
+        // Implementation for displaying final results
     }
 }
