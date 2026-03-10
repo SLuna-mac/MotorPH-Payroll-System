@@ -8,12 +8,15 @@ public class MotorPHPayroll {
     }
 
     // =========================
-    // PERSON 1 - LOGIN SYSTEM
+    // PERSON 1 – LOGIN SYSTEM
     // =========================
     static void login() {
+
         Scanner sc = new Scanner(System.in);
+
         System.out.print("Username: ");
         String username = sc.nextLine();
+
         System.out.print("Password: ");
         String password = sc.nextLine();
 
@@ -24,72 +27,87 @@ public class MotorPHPayroll {
 
         if (username.equals("employee")) {
             employeeMenu();
-        } else if (username.equals("payroll staff")) {
+        }
+        else if (username.equals("payroll staff")) {
             payrollMenu();
-        } else {
+        }
+        else {
             System.out.println("Incorrect username and/or password");
             System.exit(0);
         }
     }
 
+    // =========================
+    // PERSON 1 – EMPLOYEE MENU
+    // =========================
     static void employeeMenu() {
+
         Scanner sc = new Scanner(System.in);
+
         System.out.println("\nEMPLOYEE MENU");
         System.out.println("1. Enter your employee number");
         System.out.println("2. Exit the program");
 
         int choice = sc.nextInt();
+
         if (choice == 1) {
+
             System.out.print("Enter employee number: ");
             int empNum = sc.nextInt();
-            readEmployeeData(empNum);
-            
-            // --- CALLING YOUR PART HERE ---
-            double total = computeCutoffHours(empNum);
-            System.out.println("Total Hours Worked: " + total);
-            // ------------------------------
 
-        } else if (choice == 2) {
+            // send employee number to Person 2 module
+            readEmployeeData(empNum);
+
+        }
+        else if (choice == 2) {
             System.exit(0);
-        } else {
+        }
+        else {
             System.out.println("Invalid option");
             System.exit(0);
         }
     }
 
+    // =========================
+    // PERSON 1 – PAYROLL STAFF MENU
+    // =========================
     static void payrollMenu() {
+
         Scanner sc = new Scanner(System.in);
+
         System.out.println("\nPAYROLL STAFF MENU");
         System.out.println("1. Process Payroll");
         System.out.println("2. Exit the program");
 
         int choice = sc.nextInt();
+
         if (choice == 1) {
             System.out.println("Payroll processing will be implemented here.");
-        } else if (choice == 2) {
+        }
+        else if (choice == 2) {
             System.exit(0);
-        } else {
+        }
+        else {
             System.out.println("Invalid option");
             System.exit(0);
         }
     }
 
     // =========================
-    // PERSON 2 - EMPLOYEE DATA
+    // PERSON 2 – EMPLOYEE DATA
     // =========================
     static void readEmployeeData(int employeeNumber) {
-        // Implementation for reading employee details goes here
+
     }
 
     // =========================
-    // PERSON 3 - ATTENDANCE LOGIC
+    // PERSON 3 – ATTENDANCE LOGIC
     // =========================
     static double computeDailyHours(String login, String logout) {
-        // for now this returns 0.0, so the total will be 0.0
-        return 0.0; 
+        return 0;
     }
 
-    // =========================
+        // =========================
     // PERSON 4 – HOURS AGGREGATION
     // =========================
     static double computeCutoffHours(int employeeNumber) {
@@ -101,30 +119,38 @@ public class MotorPHPayroll {
                 String[] data = line.split(",");
                 int id = Integer.parseInt(data[0].trim());
 
+                // check if this row belongs to the employee
                 if (id == employeeNumber) {
                     String login = data[4].trim();
                     String logout = data[5].trim();
+
+                    // call Person 3's method
                     double dailyHours = computeDailyHours(login, logout);
+
+                    // add to total
                     totalHours += dailyHours;
                 }
             }
         } catch (Exception e) {
             System.out.println("Error reading attendance file.");
         }
+
         return totalHours;
     }
 
+
     // =========================
-    // PERSON 5 - SALARY COMPUTATION
+    // PERSON 5 – SALARY COMPUTATION
     // =========================
     static void computeSalary(double hours, double rate) {
-        // Implementation for salary calculation
+
     }
 
     // =========================
-    // PERSON 6 - OUTPUT DISPLAY
+    // PERSON 6 – OUTPUT DISPLAY
     // =========================
     static void printPayroll() {
-        // Implementation for displaying final results
+
     }
+
 }
