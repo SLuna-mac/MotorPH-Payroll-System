@@ -55,7 +55,6 @@ public class MotorPHPayroll {
             System.out.print("Enter employee number: ");
             int empNum = sc.nextInt();
 
-            // send employee number to Person 2 module
             readEmployeeData(empNum);
 
         }
@@ -111,6 +110,8 @@ static void readEmployeeData(int employeeNumber) {
             String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
             int empNumber = Integer.parseInt(data[0].trim());
+       
+    }
 
             if (empNumber == employeeNumber) {
 
@@ -138,20 +139,52 @@ static void readEmployeeData(int employeeNumber) {
     // PERSON 3 – ATTENDANCE LOGIC
     // =========================
     static double computeDailyHours(String login, String logout) {
+
+        // Person 3 will implement time calculations here
         return 0;
+
     }
 
     // =========================
     // PERSON 4 – HOURS AGGREGATION
     // =========================
     static double computeCutoffHours(int employeeNumber) {
-        return 0;
+
+        double totalHours = 0.0;
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
+
+            while ((line = br.readLine()) != null) {
+
+                String[] data = line.split(",");
+
+                int id = Integer.parseInt(data[0].trim());
+
+                if (id == employeeNumber) {
+
+                    String login = data[4].trim();
+                    String logout = data[5].trim();
+
+                    double dailyHours = computeDailyHours(login, logout);
+
+                    totalHours += dailyHours;
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading attendance file.");
+        }
+
+        return totalHours;
     }
 
     // =========================
     // PERSON 5 – SALARY COMPUTATION
     // =========================
     static void computeSalary(double hours, double rate) {
+
+        // Person 5 will implement salary and deductions here
 
     }
 
@@ -160,6 +193,7 @@ static void readEmployeeData(int employeeNumber) {
     // =========================
     static void printPayroll() {
 
-    }
+        // Person 6 will implement formatted output here
 
+    }
 }
