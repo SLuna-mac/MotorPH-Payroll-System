@@ -96,79 +96,44 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 2 – EMPLOYEE DATA
     // =========================
-    static void readEmployeeData(int employeeNumber) {
-package com.example;
+static void readEmployeeData(int employeeNumber) {
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+    String line;
 
-public class Main {
+    try {
 
-    public static void main(String[] args) {
+        BufferedReader br = new BufferedReader(new FileReader("employees.csv"));
 
-        int employeeNumber = 10001;
+        br.readLine(); // skip header row
 
-        String[] employee = readEmployeeData(employeeNumber);
+        while ((line = br.readLine()) != null) {
 
-        if (employee != null) {
+            String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            int empNumber = Integer.parseInt(data[0].trim());
+
+            if (empNumber == employeeNumber) {
+
+                String firstName = data[1].trim();
+                String lastName = data[2].trim();
+                String birthday = data[3].trim();
+                String hourlyRate = data[data.length - 1].replace("\"", "").trim();
+
+                //System.out.println("Employee Number: " + empNumber);
+                //System.out.println("Name: " + firstName + " " + lastName);
+                //System.out.println("Birthday: " + birthday);
+                //System.out.println("Hourly Rate: " + hourlyRate);
+
+                break;
+            }
         }
 
+        br.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-
-    static String[] readEmployeeData(int employeeNumber) {
-
-        String line;
-
-        try {
-
-            InputStream input = Main.class.getClassLoader()
-                    .getResourceAsStream("employees.csv");
-
-            if (input == null) {
-                return null;
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(input));
-
-            br.readLine(); // skip header
-
-            while ((line = br.readLine()) != null) {
-
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-                int empNumber = Integer.parseInt(data[0].trim());
-
-                if (empNumber == employeeNumber) {
-
-                    String firstName = data[1].trim();
-                    String lastName = data[2].trim();
-                    String birthday = data[3].trim();
-                    String hourlyRate = data[data.length - 1].replace("\"", "").trim();
-
-                    br.close();
-
-                    return new String[]{
-                            String.valueOf(empNumber),
-                            firstName,
-                            lastName,
-                            birthday,
-                            hourlyRate
-                    };
-                }
-            }
-
-            br.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    }
-
+}
     // =========================
     // PERSON 3 – ATTENDANCE LOGIC
     // =========================
