@@ -99,12 +99,46 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 2 – EMPLOYEE DATA
     // =========================
-    static void readEmployeeData(int employeeNumber) {
+static void readEmployeeData(int employeeNumber) {
 
-        // Person 2 will implement CSV reading here
+    String line;
 
+    try {
+
+        BufferedReader br = new BufferedReader(new FileReader("employees.csv"));
+
+        br.readLine(); // skip header row
+
+        while ((line = br.readLine()) != null) {
+
+            String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            int empNumber = Integer.parseInt(data[0].trim());
+       
     }
 
+            if (empNumber == employeeNumber) {
+
+                String firstName = data[1].trim();
+                String lastName = data[2].trim();
+                String birthday = data[3].trim();
+                String hourlyRate = data[data.length - 1].replace("\"", "").trim();
+
+                //System.out.println("Employee Number: " + empNumber);
+                //System.out.println("Name: " + firstName + " " + lastName);
+                //System.out.println("Birthday: " + birthday);
+                //System.out.println("Hourly Rate: " + hourlyRate);
+
+                break;
+            }
+        }
+
+        br.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
     // =========================
     // PERSON 3 – ATTENDANCE LOGIC
     // =========================
