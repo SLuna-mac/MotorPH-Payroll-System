@@ -242,11 +242,11 @@ public class MotorPHPayroll {
         
         System.out.println("PAYROLL SUMMARY");
         System.out.println("Gross Salary: " + totalGrossSalary);
-        System.out.println("Deductions:");
-        System.out.println("SSS: " + SSS);
-        System.out.println("PhilHealth: " + philHealthEmployee);
-        System.out.println("PagIBIG: " + pagIbigEmployee);
-        System.out.println("Tax: " + tax);
+        System.out.println("Deductions: ");
+        System.out.println(" SSS: " + SSS);
+        System.out.println(" PhilHealth: " + philHealthEmployee);
+        System.out.println(" Pag-IBIG: " + pagIbigEmployee);
+        System.out.println(" Tax: " + tax);
         System.out.println("Total Deductions: " + totalDeductions);
         System.out.println("Net Salary: " + netSalary);
      
