@@ -134,7 +134,29 @@ public class MotorPHPayroll {
     // =========================
     static double computeDailyHours(String login, String logout) {
 
-        return 0; // person 3 will implement
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm:ss a"); // time format in CSV
+
+        LocalTime loginTime = LocalTime.parse(login, formatter); // convert login string to time
+        LocalTime logoutTime = LocalTime.parse(logout, formatter); // convert logout string to time
+
+        LocalTime startWork = LocalTime.of(8, 0);  // 8:00 AM
+        LocalTime endWork = LocalTime.of(17, 0);   // 5:00 PM
+
+        if (loginTime.isBefore(startWork)) {
+                loginTime = startWork; // ignore early time before 8 AM
+        }
+
+        if (logoutTime.isAfter(endWork)) {
+                logoutTime = endWork; // ignore overtime after 5 PM
+        }
+
+        if (logoutTime.isBefore(loginTime)) {
+                return 0; // safety check
+        }
+
+        Duration worked = Duration.between(loginTime, logoutTime); // compute time difference
+
+        return worked.toMinutes() / 60.0; // convert to hours (no rounding)
 
     }
 
