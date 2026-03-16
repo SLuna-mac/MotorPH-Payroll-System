@@ -153,6 +153,30 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 4 – HOURS AGGREGATION
     // =========================
+<<<<<<< Jetliarm-patch-1
+    static double computeCutoffHours(int employeeNumber) {
+        double totalHours = 0.0;
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length < 6) continue; 
+
+                try {
+                    int id = Integer.parseInt(data[0].trim());
+                    if (id == employeeNumber) {
+                        totalHours += computeDailyHours(data[4].trim(), data[5].trim());
+                    }
+                } catch (NumberFormatException e) {
+                    // skip header
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error reading attendance file.");
+        }
+        return totalHours;
+=======
     static double[] computeCutoffHours(int employeeNumber) {
 
         double cutoff1 = 0; // hours worked from day 1–15
@@ -192,6 +216,7 @@ public class MotorPHPayroll {
         }
 
         return new double[]{cutoff1, cutoff2}; // return both cutoff totals
+>>>>>>> main
     }
 
     // =========================
