@@ -126,34 +126,8 @@ public class MotorPHPayroll {
     // =========================
     static double computeDailyHours(String login, String logout) {
 
-<<<<<<< HEAD
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm:ss a"); 
         // format used by the attendance CSV file
-=======
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm:ss a"); // time format in CSV
-
-        LocalTime loginTime = LocalTime.parse(login, formatter); // convert login string to time
-        LocalTime logoutTime = LocalTime.parse(logout, formatter); // convert logout string to time
-
-        LocalTime startWork = LocalTime.of(8, 0);  // 8:00 AM
-        LocalTime endWork = LocalTime.of(17, 0);   // 5:00 PM
-
-        if (loginTime.isBefore(startWork)) {
-                loginTime = startWork; // ignore early time before 8 AM
-        }
-
-        if (logoutTime.isAfter(endWork)) {
-                logoutTime = endWork; // ignore overtime after 5 PM
-        }
-
-        if (logoutTime.isBefore(loginTime)) {
-                return 0; // safety check
-        }
-
-        Duration worked = Duration.between(loginTime, logoutTime); // compute time difference
-
-        return worked.toMinutes() / 60.0; // convert to hours (no rounding)
->>>>>>> 2cecb4d4e56eb735ac22c51994870bb6d1e056f0
 
         LocalTime loginTime = LocalTime.parse(login, formatter); // convert login text to time object
         LocalTime logoutTime = LocalTime.parse(logout, formatter); // convert logout text to time object
@@ -223,7 +197,6 @@ public class MotorPHPayroll {
     // =========================
     // PERSON 5 – SALARY COMPUTATION
     // =========================
-<<<<<<< HEAD
     static double[] computeSalary(double hours1, double hours2, double hourlyRate) {
 
         double grossSalary1 = hours1 * hourlyRate; // salary for first cutoff
@@ -234,24 +207,12 @@ public class MotorPHPayroll {
 
         try (BufferedReader br = new BufferedReader(new FileReader("SSS_Table.csv"))) {
 
-=======
-    
-    static double[] computeSalary(double hours1, double hours2, double hourlyRate) {
-        
-        double grossSalary1 = hours1 * hourlyRate;
-        double grossSalary2 = hours2 * hourlyRate;
-        double totalGrossSalary = grossSalary1 + grossSalary2;
-        //SSS
-        double SSS = 0;        
-        try(BufferedReader br = new BufferedReader(new FileReader("SSS_Table.csv"))) {
->>>>>>> 2cecb4d4e56eb735ac22c51994870bb6d1e056f0
             br.readLine();
             String line;
 
             while ((line = br.readLine()) != null) {
 
                 String[] parts = line.split(",");
-<<<<<<< HEAD
 
                 double start = Double.parseDouble(parts[0].trim());
                 double end = Double.parseDouble(parts[1].trim());
@@ -259,16 +220,6 @@ public class MotorPHPayroll {
 
                 if (totalGrossSalary >= start && totalGrossSalary <= end) {
                     SSS = contribution; // select correct SSS bracket
-=======
-                if (parts.length < 3) continue;
-                
-                double start = Double.parseDouble(parts[0].trim());
-                double end = Double.parseDouble(parts[1].trim());
-                double contribution = Double.parseDouble(parts[2].trim());
-                
-                if (totalGrossSalary >= start && totalGrossSalary <= end) {
-                    SSS = contribution;
->>>>>>> 2cecb4d4e56eb735ac22c51994870bb6d1e056f0
                     break;
                 }
             }
@@ -276,20 +227,13 @@ public class MotorPHPayroll {
         } catch (IOException e) {
             System.out.println("Error reading file");
         }
-<<<<<<< HEAD
 
         double philHealth = totalGrossSalary * 0.03; // philhealth rate
 
-=======
-        //PhilHealth
-        double philHealth = totalGrossSalary * 0.03;
-        
->>>>>>> 2cecb4d4e56eb735ac22c51994870bb6d1e056f0
         if (totalGrossSalary <= 10000)
             philHealth = 300;
         else if (totalGrossSalary >= 60000)
             philHealth = 1800;
-<<<<<<< HEAD
 
         double philHealthEmployee = philHealth * 0.5; // employee share
 
@@ -324,52 +268,8 @@ public class MotorPHPayroll {
         double netSalary = totalGrossSalary - totalDeductions; // final take-home pay
 
         return new double[]{grossSalary1, grossSalary2, totalDeductions, netSalary};
-=======
-        
-        double philHealthEmployee = philHealth * 0.5;
-        //PagIBIG
-        double pagIbigRate = 0;
-        
-        if(totalGrossSalary >= 1000 && totalGrossSalary <= 1500)
-            pagIbigRate = 0.01;
-        else if (totalGrossSalary > 1500)
-            pagIbigRate = 0.02;
-        
-        double pagIbigEmployee = Math.min(totalGrossSalary * pagIbigRate, 100);
-        //Withholding tax
-        double taxableIncome = totalGrossSalary - (SSS + philHealthEmployee + pagIbigEmployee);       
-        double tax;
-        
-        if (taxableIncome <= 20832)
-            tax = 0;
-        else if (taxableIncome <= 33333)
-            tax = (taxableIncome - 20833)*0.20;
-        else if (taxableIncome <= 66666)
-            tax = 2500 + (taxableIncome - 33333)*0.25;
-        else if (taxableIncome <= 166666)
-            tax = 10833 + (taxableIncome - 66667)*0.30;
-        else if (taxableIncome <= 666666)
-            tax = 40833.33 + (taxableIncome - 166667)*0.32;
-        else 
-            tax = 200833.33 + (taxableIncome - 666667)*0.35;
-        
-        double totalDeductions = SSS + philHealthEmployee + pagIbigEmployee + tax;
-        double netSalary = totalGrossSalary - totalDeductions;
-        
-        System.out.println("PAYROLL SUMMARY");
-        System.out.println("Gross Salary: " + totalGrossSalary);
-        System.out.println("Deductions: ");
-        System.out.println(" SSS: " + SSS);
-        System.out.println(" PhilHealth: " + philHealthEmployee);
-        System.out.println(" Pag-IBIG: " + pagIbigEmployee);
-        System.out.println(" Tax: " + tax);
-        System.out.println("Total Deductions: " + totalDeductions);
-        System.out.println("Net Salary: " + netSalary);
-     
-        return new double[]{totalDeductions, netSalary};
->>>>>>> 2cecb4d4e56eb735ac22c51994870bb6d1e056f0
     }
-     
+
     // =========================
     // PERSON 6 – PAYROLL PROCESS
     // =========================
