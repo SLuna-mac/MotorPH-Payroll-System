@@ -1,131 +1,106 @@
-MotorPHPayrollSystem Group 45
-CP1 - MS2 Source Code 
+MotorPHPayroll
+CP1 - MS2 Source Code
 
-Basic Payroll Program
+Team Details
+Each team member is assigned a specific module to ensure clear responsibility and organized development.
+Person 1 – Project Lead / Integrator
+Responsibilities:
+Handles login system, employee menu, and payroll menu
+Controls the main program flow
+Integrates all modules into one system
+Oversees final testing
 
-This program reads employee information and attendance records from CSV files, computes total hours worked per payroll cutoff, and calculates salary including deductions.
+Person 2 – Employee Data Module
+Responsibilities:
+Reads employee data from employees.csv
+Extracts:
+Employee Number
+Name
+Birthday
+Hourly Rate
+Displays employee information
 
+Person 3 – Attendance and Time Computation
+Responsibilities:
+Reads login and logout time from attendance.csv
+Applies 10-minute grace period
+Applies working limits (8:00 AM to 5:00 PM)
+Deducts 1 hour lunch break
+Computes daily working hours capped at 8 hours
 
-How the Program Works
+Person 4 – Cutoff Hours Aggregation
+Responsibilities:
+Processes attendance records per employee
+Calls computeDailyHours() method
+Groups hours into two cutoffs:
+Day 1 to 15
+Day 16 to end
+Returns total hours per cutoff
 
-Imports
+Person 5 – Salary and Deduction Computation
+Responsibilities:
+Computes gross salary per cutoff using hours × hourly rate
+Computes total gross salary from both payroll cutoffs
+Applies deductions:
+SSS (based on SSS_Table.csv)
+PhilHealth (3% with limits applied)
+Pag-IBIG (1% or 2% capped at 100)
+Withholding tax based on defined income brackets in the program
+Computes total deductions and net salary
 
-* BufferedReader and FileReader are used to read CSV files line by line
-* LocalTime and Duration are used to compute working hours
-* DateTimeFormatter is used to parse time values
-* Scanner is used to accept user input
+Person 6 – Payroll Processing and Output
+Responsibilities:
+Handles payroll processing menu
+Processes payroll for one or all employees
+Displays output in structured format including:
+Employee Number
+Cutoff 1 Hours and Gross Salary
+Cutoff 2 Hours and Gross Salary
+Total Deductions
+Net Salary
 
+Program Details
+MotorPHPayroll is a Java-based payroll system that reads employee and attendance data from CSV files and computes payroll information.
+The program begins with a login system where users can log in as either employee or payroll staff.
+Employee users can enter their employee number to view personal details including name, birthday, and hourly rate.
+Payroll staff users can process payroll either for a single employee or for all employees.
+The system reads employee data from employees.csv and retrieves attendance records from attendance.csv. It calculates daily working hours using login and logout times while applying payroll rules such as grace period, lunch deduction, working hour limits, and an 8-hour cap per day.
+Total working hours are grouped into two payroll cutoffs: days 1–15 and days 16–end of the month.
+Salary is computed using total hours worked and hourly rate. The system then applies deductions including SSS, PhilHealth, Pag-IBIG, and withholding tax to compute the final net salary.
 
-Main Class and Method
-public class MotorPHPayroll
+Files Used
+employees.csv
+Contains employee information including hourly rate
+attendance.csv
+Contains employee attendance records with login and logout times
+SSS_Table.csv
+Contains salary brackets and corresponding SSS contributions
 
-* This is the main class of the program
-* The main method starts the system by calling the login method
+How to Run the Program
+Compile the program
+javac MotorPHPayroll.java
+Run the program
+java MotorPHPayroll
+Sample Input
+Employee View:
+Username: employee
+Password: 12345
+Payroll View:
+Username: payroll staff
+Password: 12345
 
-Login System
+Output Description
+For payroll processing, the system displays results per employee in the following format:
+Employee #: [Employee Number]
+Cutoff 1 Hours: [Total Hours]
+Gross Salary: [Computed Salary]
+Cutoff 2 Hours: [Total Hours]
+Gross Salary: [Computed Salary]
+Total Deductions: [SSS + PhilHealth + Pag-IBIG + Tax]
+Net Salary: [Final Salary After Deductions]
+Each employee’s payroll is displayed separately with labeled sections for clarity. All values are formatted to two decimal places for consistency.
 
-* The program asks for a username and password
-* Two roles are supported:
+Project Plan Link
+MO-IT101 Project Plan_Group 45
 
-  * employee
-  * payroll staff
-* Incorrect credentials will terminate the program
-
-
-Employee Menu
-
-* Allows user to enter an employee number
-* Reads employee details from employees.csv
-* Displays:
-
-  * Employee Number
-  * Employee Name
-  * Birthday
-  * Hourly Rate
-
-
-Payroll Menu
-
-* Allows payroll staff to process:
-
-  * One employee
-  * All employees
-
-
-Reading Employee Data
-
-* The program reads employees.csv line by line
-* Skips the header row
-* Matches the entered employee number
-* Extracts employee details and hourly rate
-
-
-Attendance Processing
-
-* The program reads attendance.csv
-* Matches records based on employee number
-* Extracts:
-
-  * Date
-  * Login time
-  * Logout time
-
-Compute Daily Hours
-
-* Login and logout times are parsed using H:mm format
-* Grace period is applied until 8:10 AM
-* Maximum working time is capped at 5:00 PM
-* One hour lunch break is deducted
-* Total hours are capped at 8 hours
-
-Cutoff Computation
-
-* Days 1–15 → Cutoff 1
-* Days 16–end → Cutoff 2
-* Hours are accumulated separately for each cutoff
-
-Salary Computation
-
-* Gross salary is calculated using:
-  Hours × Hourly Rate
-
-* Deductions include:
-
-  * SSS (based on salary bracket from SSS_Table.csv)
-  * PhilHealth (3% with limits applied)
-  * Pag-IBIG (1% or 2% capped at 100)
-  * Tax (based on taxable income brackets)
-
-* Net Salary is computed as:
-  Gross Salary − Total Deductions
-
-Output
-
-* Displays per employee:
-
-  * Cutoff 1 Hours and Salary
-  * Cutoff 2 Hours and Salary
-  * Total Deductions
-  * Net Salary
-
-Notes
-
-* CSV files must be in the same directory as the program
-
-* File names must match exactly:
-  employees.csv
-  attendance.csv
-  SSS_Table.csv
-
-* The program currently processes available attendance data
-
-* If only one date is present, only Cutoff 1 will have values
-
-* The system follows payroll rules such as:
-
-  * Grace period
-  * Lunch deduction
-  * Maximum working hours
-
-
-End of Program Documentation
+End of Documentation
