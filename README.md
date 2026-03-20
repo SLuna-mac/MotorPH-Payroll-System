@@ -5,7 +5,6 @@ Basic Payroll Program
 
 This program reads employee information and attendance records from CSV files, computes total hours worked per payroll cutoff, and calculates salary including deductions.
 
----
 
 How the Program Works
 
@@ -16,15 +15,12 @@ Imports
 * DateTimeFormatter is used to parse time values
 * Scanner is used to accept user input
 
----
 
 Main Class and Method
 public class MotorPHPayroll
 
 * This is the main class of the program
 * The main method starts the system by calling the login method
-
----
 
 Login System
 
@@ -35,7 +31,6 @@ Login System
   * payroll staff
 * Incorrect credentials will terminate the program
 
----
 
 Employee Menu
 
@@ -48,7 +43,6 @@ Employee Menu
   * Birthday
   * Hourly Rate
 
----
 
 Payroll Menu
 
@@ -57,7 +51,6 @@ Payroll Menu
   * One employee
   * All employees
 
----
 
 Reading Employee Data
 
@@ -66,7 +59,6 @@ Reading Employee Data
 * Matches the entered employee number
 * Extracts employee details and hourly rate
 
----
 
 Attendance Processing
 
@@ -78,8 +70,6 @@ Attendance Processing
   * Login time
   * Logout time
 
----
-
 Compute Daily Hours
 
 * Login and logout times are parsed using H:mm format
@@ -88,15 +78,11 @@ Compute Daily Hours
 * One hour lunch break is deducted
 * Total hours are capped at 8 hours
 
----
-
 Cutoff Computation
 
 * Days 1–15 → Cutoff 1
 * Days 16–end → Cutoff 2
 * Hours are accumulated separately for each cutoff
-
----
 
 Salary Computation
 
@@ -113,8 +99,6 @@ Salary Computation
 * Net Salary is computed as:
   Gross Salary − Total Deductions
 
----
-
 Output
 
 * Displays per employee:
@@ -123,8 +107,6 @@ Output
   * Cutoff 2 Hours and Salary
   * Total Deductions
   * Net Salary
-
----
 
 Notes
 
@@ -145,6 +127,5 @@ Notes
   * Lunch deduction
   * Maximum working hours
 
----
 
 End of Program Documentation
