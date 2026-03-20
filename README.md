@@ -101,6 +101,6 @@ Net Salary: [Final Salary After Deductions]
 Each employee’s payroll is displayed separately with labeled sections for clarity. All values are formatted to two decimal places for consistency.
 
 Project Plan Link
-MO-IT101 Project Plan_Group 45
+[MO-IT101 Project Plan_Group 45](https://docs.google.com/document/d/1-yuWogwFI0ELiFEDR-aVTQXcsZ-ACjhQbn9nW-KrSk0/edit?usp=sharing)
 
 End of Documentation
