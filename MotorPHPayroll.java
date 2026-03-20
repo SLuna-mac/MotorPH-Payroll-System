@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class MotorPHPayroll {
 
     public static void main(String[] args) {
-        login(); // program starts by asking user credentials
+        login();
     }
 
     // =========================
@@ -18,25 +18,25 @@ public class MotorPHPayroll {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Username: ");
-        String username = sc.nextLine(); // read username from user
+        String username = sc.nextLine();
 
         System.out.print("Password: ");
-        String password = sc.nextLine(); // read password from user
+        String password = sc.nextLine();
 
-        if (!password.equals("12345")) { // check required password
+        if (!password.equals("12345")) {
             System.out.println("Incorrect username and/or password");
-            System.exit(0); // terminate program if password is incorrect
+            System.exit(0);
         }
 
-        if (username.equalsIgnoreCase("employee")) { // employee login branch
+        if (username.equalsIgnoreCase("employee")) {
             employeeMenu();
         }
-        else if (username.equalsIgnoreCase("payroll staff")) { // payroll staff branch
+        else if (username.equalsIgnoreCase("payroll staff")) {
             payrollMenu();
         }
         else {
             System.out.println("Incorrect username and/or password");
-            System.exit(0); // terminate program if username invalid
+            System.exit(0);
         }
     }
 
@@ -48,18 +48,18 @@ public class MotorPHPayroll {
         System.out.println("1. Enter your employee number");
         System.out.println("2. Exit the program");
 
-        int choice = sc.nextInt(); // read menu option
+        int choice = sc.nextInt();
 
         if (choice == 1) {
 
             System.out.print("Enter employee number: ");
-            int empNum = sc.nextInt(); // employee enters their ID
+            int empNum = sc.nextInt();
 
-            readEmployeeData(empNum); // display employee info from CSV
+            readEmployeeData(empNum);
 
         }
         else {
-            System.exit(0); // exit program
+            System.exit(0);
         }
     }
 
@@ -71,10 +71,10 @@ public class MotorPHPayroll {
         System.out.println("1. Process Payroll");
         System.out.println("2. Exit");
 
-        int choice = sc.nextInt(); // payroll menu selection
+        int choice = sc.nextInt();
 
         if (choice == 1) {
-            payrollProcessMenu(); // open payroll processing options
+            payrollProcessMenu();
         }
         else {
             System.exit(0);
@@ -86,31 +86,32 @@ public class MotorPHPayroll {
     // =========================
     static void readEmployeeData(int employeeNumber) {
 
-        try (BufferedReader br = new BufferedReader(new FileReader("employees.csv"))) { 
-            // open employee CSV file for reading
+        try (BufferedReader br = new BufferedReader(new FileReader("employees.csv"))) {
 
-            br.readLine(); // skip header row
+            br.readLine();
             String line;
 
-            while ((line = br.readLine()) != null) { // loop through each employee record
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) continue; // FIX
 
                 String[] data = line.split(",");
 
-                int empNumber = Integer.parseInt(data[0].trim()); // extract employee ID
+                int empNumber = Integer.parseInt(data[0].trim());
 
-                if (empNumber == employeeNumber) { // match entered employee number
+                if (empNumber == employeeNumber) {
 
                     String lastName = data[1].trim();
                     String firstName = data[2].trim();
                     String birthday = data[3].trim();
-                    String hourlyRate = data[data.length - 1].trim(); // last column = hourly rate
+                    String hourlyRate = data[data.length - 1].trim();
 
                     System.out.println("\nEmployee Number: " + empNumber);
                     System.out.println("Employee Name: " + firstName + " " + lastName);
                     System.out.println("Birthday: " + birthday);
                     System.out.println("Hourly Rate: " + hourlyRate);
 
-                    return; // stop searching once employee is found
+                    return;
                 }
             }
 
@@ -126,28 +127,27 @@ public class MotorPHPayroll {
     // =========================
     static double computeDailyHours(String login, String logout) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm:ss a"); 
-        // format used by the attendance CSV file
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm"); 
+        // FIX: match CSV format (08:05)
 
-        LocalTime loginTime = LocalTime.parse(login, formatter); // convert login text to time object
-        LocalTime logoutTime = LocalTime.parse(logout, formatter); // convert logout text to time object
+        LocalTime loginTime = LocalTime.parse(login, formatter);
+        LocalTime logoutTime = LocalTime.parse(logout, formatter);
 
-        LocalTime startWork = LocalTime.of(8, 0);  // official start time
-        LocalTime endWork = LocalTime.of(17, 0);   // official end time
+        LocalTime startWork = LocalTime.of(8, 0);
+        LocalTime endWork = LocalTime.of(17, 0);
 
         if (loginTime.isBefore(startWork))
-            loginTime = startWork; // ignore early login before 8 AM
+            loginTime = startWork;
 
         if (logoutTime.isAfter(endWork))
-            logoutTime = endWork; // ignore overtime beyond 5 PM
+            logoutTime = endWork;
 
         if (logoutTime.isBefore(loginTime))
-            return 0; // safety check for invalid data
+            return 0;
 
-        Duration worked = Duration.between(loginTime, logoutTime); 
-        // calculate difference between login and logout
+        Duration worked = Duration.between(loginTime, logoutTime);
 
-        return worked.toMinutes() / 60.0; // convert minutes to hours (no rounding rule)
+        return worked.toMinutes() / 60.0;
     }
 
     // =========================
@@ -155,35 +155,37 @@ public class MotorPHPayroll {
     // =========================
     static double[] computeCutoffHours(int employeeNumber) {
 
-        double cutoff1 = 0; // hours worked from day 1–15
-        double cutoff2 = 0; // hours worked from day 16–30
+        double cutoff1 = 0;
+        double cutoff2 = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
 
+            br.readLine(); // FIX: skip header
+
             String line;
 
-            while ((line = br.readLine()) != null) { // read attendance records
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) continue; // FIX
 
                 String[] data = line.split(",");
 
-                int id = Integer.parseInt(data[0].trim()); // employee ID column
+                int id = Integer.parseInt(data[0].trim());
 
                 if (id == employeeNumber) {
 
                     String date = data[3].trim();
-                    int day = Integer.parseInt(date.split("/")[1]); 
-                    // extract day from date to determine cutoff period
+                    int day = Integer.parseInt(date.split("/")[1]);
 
                     String login = data[4].trim();
                     String logout = data[5].trim();
 
-                    double hours = computeDailyHours(login, logout); 
-                    // call Person 3 method to compute daily work hours
+                    double hours = computeDailyHours(login, logout);
 
                     if (day <= 15)
-                        cutoff1 += hours; // accumulate first cutoff hours
+                        cutoff1 += hours;
                     else
-                        cutoff2 += hours; // accumulate second cutoff hours
+                        cutoff2 += hours;
                 }
             }
 
@@ -191,7 +193,7 @@ public class MotorPHPayroll {
             System.out.println("Error reading attendance file.");
         }
 
-        return new double[]{cutoff1, cutoff2}; // return both cutoff totals
+        return new double[]{cutoff1, cutoff2};
     }
 
     // =========================
@@ -199,9 +201,9 @@ public class MotorPHPayroll {
     // =========================
     static double[] computeSalary(double hours1, double hours2, double hourlyRate) {
 
-        double grossSalary1 = hours1 * hourlyRate; // salary for first cutoff
-        double grossSalary2 = hours2 * hourlyRate; // salary for second cutoff
-        double totalGrossSalary = grossSalary1 + grossSalary2; // total monthly gross
+        double grossSalary1 = hours1 * hourlyRate;
+        double grossSalary2 = hours2 * hourlyRate;
+        double totalGrossSalary = grossSalary1 + grossSalary2;
 
         double SSS = 0;
 
@@ -219,7 +221,7 @@ public class MotorPHPayroll {
                 double contribution = Double.parseDouble(parts[2].trim());
 
                 if (totalGrossSalary >= start && totalGrossSalary <= end) {
-                    SSS = contribution; // select correct SSS bracket
+                    SSS = contribution;
                     break;
                 }
             }
@@ -228,14 +230,14 @@ public class MotorPHPayroll {
             System.out.println("Error reading file");
         }
 
-        double philHealth = totalGrossSalary * 0.03; // philhealth rate
+        double philHealth = totalGrossSalary * 0.03;
 
         if (totalGrossSalary <= 10000)
             philHealth = 300;
         else if (totalGrossSalary >= 60000)
             philHealth = 1800;
 
-        double philHealthEmployee = philHealth * 0.5; // employee share
+        double philHealthEmployee = philHealth * 0.5;
 
         double pagIbigRate = 0;
 
@@ -244,8 +246,7 @@ public class MotorPHPayroll {
         else if (totalGrossSalary > 1500)
             pagIbigRate = 0.02;
 
-        double pagIbigEmployee = Math.min(totalGrossSalary * pagIbigRate, 100); 
-        // Pag-IBIG capped at 100
+        double pagIbigEmployee = Math.min(totalGrossSalary * pagIbigRate, 100);
 
         double taxableIncome = totalGrossSalary - (SSS + philHealthEmployee + pagIbigEmployee);
 
@@ -264,8 +265,8 @@ public class MotorPHPayroll {
         else
             tax = 200833.33 + (taxableIncome - 666667) * 0.35;
 
-        double totalDeductions = SSS + philHealthEmployee + pagIbigEmployee + tax; // sum deductions
-        double netSalary = totalGrossSalary - totalDeductions; // final take-home pay
+        double totalDeductions = SSS + philHealthEmployee + pagIbigEmployee + tax;
+        double netSalary = totalGrossSalary - totalDeductions;
 
         return new double[]{grossSalary1, grossSalary2, totalDeductions, netSalary};
     }
@@ -289,12 +290,12 @@ public class MotorPHPayroll {
             System.out.print("Enter employee number: ");
             int empNum = sc.nextInt();
 
-            processOneEmployee(empNum); // process payroll for selected employee
+            processOneEmployee(empNum);
 
         }
         else if (choice == 2) {
 
-            processAllEmployees(); // process payroll for all employees
+            processAllEmployees();
 
         }
         else {
@@ -311,20 +312,19 @@ public class MotorPHPayroll {
 
             while ((line = br.readLine()) != null) {
 
+                if (line.trim().isEmpty()) continue; // FIX
+
                 String[] data = line.split(",");
 
                 int id = Integer.parseInt(data[0].trim());
 
                 if (id == employeeNumber) {
 
-                    double hourlyRate = Double.parseDouble(data[data.length - 1].trim()); 
-                    // extract hourly rate of employee
+                    double hourlyRate = Double.parseDouble(data[data.length - 1].trim());
 
-                    double[] hours = computeCutoffHours(employeeNumber); 
-                    // get cutoff hours from Person 4 module
+                    double[] hours = computeCutoffHours(employeeNumber);
 
-                    double[] payroll = computeSalary(hours[0], hours[1], hourlyRate); 
-                    // compute payroll using Person 5 module
+                    double[] payroll = computeSalary(hours[0], hours[1], hourlyRate);
 
                     System.out.println("\nCutoff 1 Hours: " + hours[0]);
                     System.out.println("Gross Salary: " + payroll[0]);
@@ -355,10 +355,11 @@ public class MotorPHPayroll {
 
             while ((line = br.readLine()) != null) {
 
-                int employeeNumber = Integer.parseInt(line.split(",")[0].trim()); 
-                // get employee ID from CSV
+                if (line.trim().isEmpty()) continue; // FIX
 
-                processOneEmployee(employeeNumber); // process payroll for each employee
+                int employeeNumber = Integer.parseInt(line.split(",")[0].trim());
+
+                processOneEmployee(employeeNumber);
             }
 
         } catch (Exception e) {
