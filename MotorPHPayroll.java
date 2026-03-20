@@ -93,7 +93,7 @@ public class MotorPHPayroll {
 
             while ((line = br.readLine()) != null) {
 
-                if (line.trim().isEmpty()) continue; // FIX
+                if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
 
@@ -127,8 +127,7 @@ public class MotorPHPayroll {
     // =========================
     static double computeDailyHours(String login, String logout) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm"); 
-        // FIX: match CSV format (08:05)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 
         LocalTime loginTime = LocalTime.parse(login, formatter);
         LocalTime logoutTime = LocalTime.parse(logout, formatter);
@@ -160,13 +159,13 @@ public class MotorPHPayroll {
 
         try (BufferedReader br = new BufferedReader(new FileReader("attendance.csv"))) {
 
-            br.readLine(); // FIX: skip header
+            br.readLine();
 
             String line;
 
             while ((line = br.readLine()) != null) {
 
-                if (line.trim().isEmpty()) continue; // FIX
+                if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
 
@@ -312,7 +311,7 @@ public class MotorPHPayroll {
 
             while ((line = br.readLine()) != null) {
 
-                if (line.trim().isEmpty()) continue; // FIX
+                if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
 
@@ -355,7 +354,7 @@ public class MotorPHPayroll {
 
             while ((line = br.readLine()) != null) {
 
-                if (line.trim().isEmpty()) continue; // FIX
+                if (line.trim().isEmpty()) continue;
 
                 int employeeNumber = Integer.parseInt(line.split(",")[0].trim());
 
